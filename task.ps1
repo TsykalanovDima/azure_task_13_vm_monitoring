@@ -62,8 +62,8 @@ $vm = Get-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
 $amaSettings = @{
     authentication = @{
         managedIdentity = @{
-            "identifier-name"  = "object_id"
-            "identifier-value" = $vm.Identity.PrincipalId
+            "identifier-name"  = "mi_res_id"
+            "identifier-value" = $vm.Identity.Id
         }
     }
 }
