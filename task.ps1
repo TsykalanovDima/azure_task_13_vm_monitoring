@@ -58,6 +58,15 @@ $Params = @{
 Set-AzVMExtension @Params
 
 Write-Host "Installing Azure Monitor Agent..."
+$vm = Get-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
+$amaSettings = @{
+    authentication = @{
+        managedIdentity = @{
+            "identifier-name"  = "object_id"
+            "identifier-value" = $vm.Identity.PrincipalId
+        }
+    }
+}
 $amaParams = @{
     ResourceGroupName  = $resourceGroupName
     VMName             = $vmName
@@ -65,5 +74,7 @@ $amaParams = @{
     Publisher          = "Microsoft.Azure.Monitor"
     ExtensionType      = "AzureMonitorLinuxAgent"
     TypeHandlerVersion = "1.0"
+    Settings           = $amaSettings
+    EnableAutomaticUpgrade = $true
 }
 Set-AzVMExtension @amaParams
